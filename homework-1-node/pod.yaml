@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-demo-node
+  labels:
+    app: hello-demo-node
+spec:
+  containers:
+  - name: otushomework-node
+    image: sinitsynva/otushomework:v3-node
+    ports:
+      - containerPort: 70
