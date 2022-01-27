@@ -13,4 +13,4 @@ def hello():
     return 'Hello world from ' + os.environ['HOSTNAME'] + ' !'
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port='70')
+    app.run(host='0.0.0.0',port='80')
