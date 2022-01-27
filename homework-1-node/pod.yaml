@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
   - name: otushomework-node
-    image: sinitsynva/otushomework:v3-node
+    image: sinitsynva/otus-homework:v4-node
     ports:
       - containerPort: 70
