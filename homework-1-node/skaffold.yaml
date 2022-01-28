@@ -6,7 +6,7 @@ build:
   artifacts:
   - image: sinitsynva/otus-homework
     docker:
-      dockerfile: app
+      dockerfile: app/Dockerfile
 deploy:
   kubectl:
     manifests:

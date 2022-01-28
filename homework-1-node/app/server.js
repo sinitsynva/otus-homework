@@ -5,6 +5,7 @@ const express = require('express');
 // Constants
 const PORT = 70;
 const HOST = '0.0.0.0';
+const STATUS = 'OK'
 
 // App
 const app = express();
@@ -13,7 +14,7 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.status(200).json({“status”: “OK”});
+  res.status(200).json({STATUS});
 });
 
 app.listen(PORT, HOST);
