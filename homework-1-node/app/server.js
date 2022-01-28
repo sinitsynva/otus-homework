@@ -13,6 +13,10 @@ app.get('/hello', (req, res) => {
   res.send('Hello World');
 });
 
+app.get('/livenessProbe', (req, res) => {
+  res.send('Ok');
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({STATUS});
 });
