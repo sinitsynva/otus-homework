@@ -13,7 +13,7 @@ spec:
              app: hello-demo-node
        spec:
           containers:
-          - name: hotushomework-node
+          - name: otushomework-node
             image: sinitsynva/otus-homework:v4-node
             ports:
               - name: web

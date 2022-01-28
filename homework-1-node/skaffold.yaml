@@ -1,11 +1,12 @@
-apiVersion: skaffold/v2alpha4
+apiVersion: skaffold/v2beta26
 kind: Config
 metadata:
   name: skaffold
 build:
   artifacts:
   - image: sinitsynva/otus-homework
-    context: sinitsynva/otus-homework
+    docker:
+      dockerfile: app
 deploy:
   kubectl:
     manifests:
