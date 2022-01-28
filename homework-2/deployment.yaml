@@ -15,6 +15,12 @@ spec:
           containers:
           - name: otushomework-node
             image: sinitsynva/otus-homework:v8-node
+            env:
+              - name: DATABASE_URI
+                valueFrom:
+                  configMapKeyRef:
+                    name: hello-config
+                    key: DATABASE_URI
             ports:
               - name: web
                 containerPort: 70
