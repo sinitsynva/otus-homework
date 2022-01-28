@@ -21,5 +21,9 @@ app.get('/health', (req, res) => {
   res.status(200).json({STATUS});
 });
 
+app.get('/conf', (req, res) => {
+  res.send(process.env.DATABASE_URI);
+});
+
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

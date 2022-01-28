@@ -8,5 +8,7 @@ build:
 deploy:
   kubectl:
     manifests:
+    - postgre.yaml
+    - app-config.yaml
     - deployment.yaml
     - service.yaml
