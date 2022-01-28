@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: hello-deployment-node
+spec:
+    replicas: 3
+    selector:
+       matchLabels:
+          app: hello-demo-node
+    template:
+       metadata:
+          labels:
+             app: hello-demo-node
+       spec:
+          containers:
+          - name: hotushomework-node
+            image: sinitsynva/otus-homework:v4-node
+            ports:
+              - name: web
+                containerPort: 70
