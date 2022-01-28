@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: hello-deployment-node
+spec:
+    replicas: 3
+    selector:
+       matchLabels:
+          app: hello-demo-node
+    template:
+       metadata:
+          labels:
+             app: hello-demo-node
+       spec:
+          containers:
+          - name: otushomework-node
+            image: sinitsynva/otus-homework:v8-node
+            ports:
+              - name: web
+                containerPort: 70
+            livenessProbe:
+              httpGet:
+                port: 70
+                path: /livenessProbe
+              initialDelaySeconds: 10
+              periodSeconds: 5
+              timeoutSeconds: 2
+            readinessProbe:
+              httpGet:
+                port: 70
+                path: /health
+              initialDelaySeconds: 10
+              periodSeconds: 5
