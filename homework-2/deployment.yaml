@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: hello-deployment-node
+    name: client-manger-deployment
 spec:
     replicas: 3
     selector:
        matchLabels:
-          app: hello-demo-node
+          app: client-manger
     template:
        metadata:
           labels:
-             app: hello-demo-node
+             app: client-manger
        spec:
           containers:
           - name: otushomework-node
@@ -18,8 +18,8 @@ spec:
             env:
               - name: DATABASE_URI
                 valueFrom:
-                  configMapKeyRef:
-                    name: hello-config
+                  secretKeyRef:
+                    name: client-manager-secrets
                     key: DATABASE_URI
             ports:
               - name: web

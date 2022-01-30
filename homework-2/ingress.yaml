@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hello-ingress-node
+  name: service-manager-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
@@ -13,6 +13,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: hello-service-node
+              name: client-manger-service
               port:
                 number: 8000
