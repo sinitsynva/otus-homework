@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "postgres3"
+spec:
+  template:
+    metadata:
+      name: "postgres"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+          - name: POSTGRES_PASSWORD
+            value: "secret"
+        command:
+          - sh
+          - "-c"
+          - |
+            psql postgres://otshwrkuser:secret@postgres/OTSHWRKDB <<'EOF'
+               insert into client_info(username, firstname, lastname, email, phone) values('vvv','aaa','bbb','ccc','9094357864');
+            EOF
+
+  backoffLimit: 0

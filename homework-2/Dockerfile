@@ -10,4 +10,6 @@ COPY server.js ./
 
 RUN npm install
 
+RUN npm install pg
+
 CMD ["node", "server.js"]

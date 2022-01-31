@@ -8,7 +8,8 @@ build:
 deploy:
   kubectl:
     manifests:
-    - postgre.yaml
+    #- postgre.yaml
     - deployment.yaml
     - service.yaml
     - secrets.yaml
+    #- migration.yaml

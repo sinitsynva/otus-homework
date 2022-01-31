@@ -1,12 +1,35 @@
 'use strict';
 
+//import * as Json from "elow/lib/Json/Decode"
+
 const express = require('express');
 
 // Constants
 const PORT = 70;
 const HOST = '0.0.0.0';
 const STATUS = 'OK'
+//type
+//type CreateClientReq = {
+  //username: string
+  //firstName: string
+  //lastName: string
+  //email: string
+//  phone: string
+//};
 
+//const createClientReq = Json.map(
+//  Json.field("username", Json.string),
+//  Json.field("firstName", Json.string),
+//  Json.field("lastName", Json.string),
+//  Json.field("email", Json.string),
+//  Json.field("phone", Json.string)
+//);
+// postgre connection postgresql+psycopg2://otshwrkuser:secret@postgres/OTSHWRKDB
+const { Pool, Client } = require('pg');
+const connectionString = process.env.DATABASE_URI;
+const pool = new Pool({
+  connectionString,
+});
 // App
 const app = express();
 app.get('/hello', (req, res) => {
@@ -21,9 +44,28 @@ app.get('/health', (req, res) => {
   res.status(200).json({STATUS});
 });
 
-app.get('/conf', (req, res) => {
-  res.send(process.env.DATABASE_URI);
-});
+app.get("/user/:userId", (req, res) => {
+    const userId = req.params.userId;
+    pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {
+    if (resalt.rows === '[]') {
+      res.status(404);
+    } else {
+      //res.status(200).json({resalt.rows(0).id,
+      //                      resalt.rows(0).username,
+      //                      resalt.rows(0).firstname,
+      //                      resalt.rows(0).lastname,
+      //                      resalt.rows(0).email,
+      //                      resalt.rows(0).phone});
+      res.send(resalt.rows[0].username);
+    }
+
+
+      //pool.end();
+    });
+  });
+
+
+
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
