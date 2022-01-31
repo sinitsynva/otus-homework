@@ -30,6 +30,9 @@ const connectionString = process.env.DATABASE_URI;
 const pool = new Pool({
   connectionString,
 });
+// error const
+const clientNotFound = "client not found"
+
 // App
 const app = express();
 app.get('/hello', (req, res) => {
@@ -47,16 +50,23 @@ app.get('/health', (req, res) => {
 app.get("/user/:userId", (req, res) => {
     const userId = req.params.userId;
     pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {
-    if (resalt.rows === '[]') {
-      res.status(404);
+    if (resalt.rows.length == 0) {
+      let errMsg = clientNotFound;
+      res.status(404).json({errMsg});
     } else {
-      //res.status(200).json({resalt.rows(0).id,
-      //                      resalt.rows(0).username,
-      //                      resalt.rows(0).firstname,
-      //                      resalt.rows(0).lastname,
-      //                      resalt.rows(0).email,
-      //                      resalt.rows(0).phone});
-      res.send(resalt.rows[0].username);
+       const id = resalt.rows[0].id;
+       const username = resalt.rows[0].username;
+       const firstname = resalt.rows[0].firstname;
+       const lastname = resalt.rows[0].lastname;
+       const email = resalt.rows[0].email;
+       const phone = resalt.rows[0].phone;
+       res.status(200).json({id,
+                            username,
+                            firstname,
+                            lastname,
+                            email,
+                            phone});
+      //res.send(resalt.rows[0].username);
     }
 
 
