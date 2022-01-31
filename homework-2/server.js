@@ -32,18 +32,18 @@ const pool = new Pool({
 });
 // error const
 const clientNotFound = "client not found"
-
+const noteAllParamInReq = "missing required request parameter"
+const clientAllreadyExists = "client already exists"
+const oneOfParamMustBeInReq = "at least one parameter must be filled"
 // App
 const app = express();
-app.get('/hello', (req, res) => {
-  res.send('Hello World');
+app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).json({STATUS});
 });
 
 app.get('/livenessProbe', (req, res) => {
-  res.send('Ok');
-});
-
-app.get('/health', (req, res) => {
   res.status(200).json({STATUS});
 });
 
@@ -66,16 +66,88 @@ app.get("/user/:userId", (req, res) => {
                             lastname,
                             email,
                             phone});
-      //res.send(resalt.rows[0].username);
-    }
-
-
-      //pool.end();
+      }
     });
   });
 
 
+ app.post("/user",(req, res) => {
+   let errMsg;
+   let id;
+   if (req.body.username == undefined || req.body.firstname ==undefined ||
+       req.body.lastname == undefined || req.body.email == undefined ||
+       req.body.phone == undefined) {
+     errMsg = noteAllParamInReq;
+     res.status(400).json({errMsg});
+   } else {
+      pool.query(`SELECT * FROM client_info WHERE username = '${req.body.username}'`, (err, resalt) =>{
+       if (resalt.rows.length == 0) {
+         pool.query(`insert into client_info(username, firstname, lastname, email, phone)
+                    values('${req.body.username}','${req.body.firstname}','${req.body.lastname}','${req.body.email}','${req.body.phone}');`, (err, resalt) =>{
+         });
+         pool.query(`SELECT * FROM client_info WHERE username = '${req.body.username}'`, (err, resalt) =>{
+           id = resalt.rows[0].id;
+           res.status(200).json({id});
+         });
+       } else {
+         errMsg = clientAllreadyExists;
+         res.status(400).json({errMsg});
+       };
+     });
+   };
+ });
 
+///delete/1
+app.delete('/user/:userId', (req, res) => {
+  const userId = req.params.userId;
+  pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {
+  if (resalt.rows.length == 0) {
+    let errMsg = clientNotFound;
+    res.status(404).json({errMsg});
+  } else {
+     pool.query(`DELETE FROM client_info WHERE id = ${userId}`, (err, resalt) =>{
+     });
+     res.status(200).json({});
+    }
+  });
+});
+
+app.put("/user/:userId",(req, res) => {
+  const userId = req.params.userId;
+  let errMsg;
+  if (req.body.username == undefined && req.body.firstname == undefined &&
+      req.body.lastname == undefined && req.body.email == undefined &&
+      req.body.phone == undefined) {
+    errMsg = oneOfParamMustBeInReq;
+    res.status(400).json({errMsg});
+  } else {
+     pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) =>{
+      if (resalt.rows.length == 0) {
+        errMsg = clientNotFound;
+        res.status(404).json({errMsg});
+      } else {
+        let user = resalt.rows[0];
+        switch(!undefined) {
+              case req.body.username: {user.username = req.body.username};
+              case req.body.firstname: {user.firstname = req.body.firstname};
+              case req.body.lastname: {user.lastname = req.body.lastname};
+              case req.body.email: {user.email = req.body.email};
+              case req.body.phone: {user.phone = req.body.phone};
+                break;
+              };
+
+        pool.query(`update  client_info
+                    set username = '${user.username}',
+                        firstname = '${user.firstname}',
+                        lastname = '${user.lastname}',
+                        email = '${user.email}',
+                        phone = '${user.phone}'
+                    where id = ${userId}`, (err, resalt) =>{
+        });
+      };
+    });
+  };
+});
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
