@@ -8,23 +8,7 @@ const express = require('express');
 const PORT = 70;
 const HOST = '0.0.0.0';
 const STATUS = 'OK'
-//type
-//type CreateClientReq = {
-  //username: string
-  //firstName: string
-  //lastName: string
-  //email: string
-//  phone: string
-//};
-
-//const createClientReq = Json.map(
-//  Json.field("username", Json.string),
-//  Json.field("firstName", Json.string),
-//  Json.field("lastName", Json.string),
-//  Json.field("email", Json.string),
-//  Json.field("phone", Json.string)
-//);
-// postgre connection postgresql+psycopg2://otshwrkuser:secret@postgres/OTSHWRKDB
+//DB connection
 const { Pool, Client } = require('pg');
 const connectionString = process.env.DATABASE_URI;
 const pool = new Pool({
@@ -35,6 +19,14 @@ const clientNotFound = "client not found"
 const noteAllParamInReq = "missing required request parameter"
 const clientAllreadyExists = "client already exists"
 const oneOfParamMustBeInReq = "at least one parameter must be filled"
+const badPhone = "bad phone number"
+//
+let user = [{ username: '',
+              firstname: '',
+              lastname: '',
+              email: '',
+              phone: ''}];
+
 // App
 const app = express();
 app.use(express.json());
@@ -79,7 +71,10 @@ app.get("/user/:userId", (req, res) => {
        req.body.phone == undefined) {
      errMsg = noteAllParamInReq;
      res.status(400).json({errMsg});
-   } else {
+   }else if (!/[+]{1,}[0-9]{11,}/.test(req.body.phone)) {
+     errMsg = badPhone;
+     res.status(400).json({errMsg});
+   }else {
       pool.query(`SELECT * FROM client_info WHERE username = '${req.body.username}'`, (err, resalt) =>{
        if (resalt.rows.length == 0) {
          pool.query(`insert into client_info(username, firstname, lastname, email, phone)
@@ -120,30 +115,29 @@ app.put("/user/:userId",(req, res) => {
       req.body.phone == undefined) {
     errMsg = oneOfParamMustBeInReq;
     res.status(400).json({errMsg});
+  } else if (req.body.phone != undefined && !/[+]{1,}[0-9]{11,}/.test(req.body.phone)) {
+    errMsg = badPhone;
+    res.status(400).json({errMsg});
   } else {
      pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) =>{
       if (resalt.rows.length == 0) {
         errMsg = clientNotFound;
         res.status(404).json({errMsg});
       } else {
-        let user = resalt.rows[0];
-        switch(!undefined) {
-              case req.body.username: {user.username = req.body.username};
-              case req.body.firstname: {user.firstname = req.body.firstname};
-              case req.body.lastname: {user.lastname = req.body.lastname};
-              case req.body.email: {user.email = req.body.email};
-              case req.body.phone: {user.phone = req.body.phone};
-                break;
-              };
-
+        user[0].username = req.body.username ?? resalt.rows.username;
+        user[0].firstname = req.body.firstname ?? resalt.rows.firstname;
+        user[0].lastname = req.body.lastname ?? resalt.rows.lastname;
+        user[0].email = req.body.email ?? resalt.rows.email;
+        user[0].phone = req.body.phone ?? resalt.rows.phone;
         pool.query(`update  client_info
-                    set username = '${user.username}',
-                        firstname = '${user.firstname}',
-                        lastname = '${user.lastname}',
-                        email = '${user.email}',
-                        phone = '${user.phone}'
+                    set username = '${user[0].username}',
+                        firstname = '${user[0].firstname}',
+                        lastname = '${user[0].lastname}',
+                        email = '${user[0].email}',
+                        phone = '${user[0].phone}'
                     where id = ${userId}`, (err, resalt) =>{
-        });
+        res.status(200).json({});
+       });
       };
     });
   };
