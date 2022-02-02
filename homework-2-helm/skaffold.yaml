@@ -1,0 +1,16 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: skaffold
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: sinitsynva/otus-homework
+deploy:
+  helm:
+    releases:
+    - name: client-manager-skaffold
+      chartPath: client-manager-charts
+      values:
+        image: sinitsynva/otus-homework

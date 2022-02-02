@@ -1,0 +1,15 @@
+replicaCount: 2
+
+image:
+  repository: hello-py
+
+service:
+  type: NodePort
+  port: 8000
+
+postgresql:
+  enabled: true
+  postgresqlUsername: otshwrkuser
+  postgresqlPassword: secret
+  postgresqlDatabase: OTSHWRKDB
+  postgresqlHost: postgres

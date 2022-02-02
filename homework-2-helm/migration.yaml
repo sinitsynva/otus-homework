@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "postgres-create-table1"
+spec:
+  template:
+    metadata:
+      name: "postgres"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+          - name: POSTGRES_PASSWORD
+            value: "secret"
+        command:
+          - sh
+          - "-c"
+          - |
+            psql postgres://otshwrkuser:secret@postgres/OTSHWRKDB <<'EOF'
+              create table client_info (id serial primary key, username varchar, firstName varchar, lastName varchar, email varchar, phone varchar);
+            EOF
+
+  backoffLimit: 0
