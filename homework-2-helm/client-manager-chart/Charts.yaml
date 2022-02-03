@@ -1,5 +1,6 @@
 apiVersion: v2
-name: client-manager-chart
+name: otushomework-node
+
 description: A Helm chart for Kubernetes
 
 type: application
