@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "client-manager-chart.fullname" . }}
-  labels:
-    {{- include "client-manager-chart.labels" . | nindent 4 }}
+  name: {{ .Values.service.name }}
+
 spec:
+  selector:
+    app: {{ .Values.image.appname }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: web
       protocol: TCP
-      name: web
-  selector:
-    {{- include "client-manager-chart.selectorLabels" . | nindent 4 }}
+      #name: web

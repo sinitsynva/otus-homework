@@ -1,29 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "client-manager-chart.fullname" . }}
-  labels:
-    {{- include "client-manager-chart.labels" . | nindent 4 }}
+  name: {{ .Values.deployment.name }}
+
 spec:
     replicas: {{ .Values.replicaCount }}
     selector:
        matchLabels:
-          {{- include "hello-chart.selectorLabels" . | nindent 6 }}
+          app: {{ .Values.image.appname }}
     template:
        metadata:
           labels:
-             {{- include "hello-chart.selectorLabels" . | nindent 8 }}
-          annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
+             app: {{ .Values.image.appname }}
+#          annotations:
+#        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
        spec:
           containers:
-          - name: {{ .Chart.Name }}
+          - name: {{ .Values.image.name }}
             image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
             env:
               - name: DATABASE_URI
                 valueFrom:
                   secretKeyRef:
-                    name: client-manager-secrets
+                    name: client-manager-secrets-1
                     key: DATABASE_URI
             ports:
               - name: web

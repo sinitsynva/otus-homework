@@ -2,12 +2,19 @@ replicaCount: 2
 
 image:
   repository: sinitsynva/otus-homework
+  appname: client-manger
+  name: otushomework-node
+
 
 service:
+  name: client-manger-service
   type: NodePort
   port: 8000
 
-postgresql:
+deployment:
+  name: client-manger-deployment
+
+externalPostgresql:
   enabled: true
   postgresqlUsername: otshwrkuser
   postgresqlPassword: secret
