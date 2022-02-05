@@ -3,7 +3,8 @@ replicaCount: 2
 image:
   repository: sinitsynva/otus-homework
   appname: client-manger
-  name: otushomework-node
+  container:
+    name: otushomework-node
 
 
 service:
@@ -14,9 +15,9 @@ service:
 deployment:
   name: client-manger-deployment
 
-externalPostgresql:
+postgresql:
   enabled: true
   postgresqlUsername: otshwrkuser
   postgresqlPassword: secret
   postgresqlDatabase: OTSHWRKDB
-  postgresqlHost: postgres
+  name: postgresql

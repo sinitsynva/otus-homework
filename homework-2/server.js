@@ -39,6 +39,10 @@ app.get('/livenessProbe', (req, res) => {
   res.status(200).json({STATUS});
 });
 
+app.get('/congig', (req, res) => {
+  res.status(200).json({connectionString});
+});
+
 app.get("/user/:userId", (req, res) => {
     const userId = req.params.userId;
     pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {
@@ -96,7 +100,7 @@ app.get("/user/:userId", (req, res) => {
 app.delete('/user/:userId', (req, res) => {
   const userId = req.params.userId;
   pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {
-  if (resalt.rows.length == 0) {
+  if (resalt.rows == undefined) {
     let errMsg = clientNotFound;
     res.status(404).json({errMsg});
   } else {

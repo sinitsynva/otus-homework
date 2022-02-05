@@ -16,7 +16,7 @@ spec:
 #        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
        spec:
           containers:
-          - name: {{ .Values.image.name }}
+          - name: {{ .Values.image.container.name }}
             image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
             env:
               - name: DATABASE_URI

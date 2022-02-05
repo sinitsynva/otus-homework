@@ -39,6 +39,10 @@ app.get('/livenessProbe', (req, res) => {
   res.status(200).json({STATUS});
 });
 
+app.get('/config', (req, res) => {
+  res.status(200).json({connectionString});
+});
+
 app.get("/user/:userId", (req, res) => {
     const userId = req.params.userId;
     pool.query(`SELECT * FROM client_info WHERE id = ${userId}`, (err, resalt) => {

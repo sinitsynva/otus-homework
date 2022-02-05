@@ -7,4 +7,12 @@ description: A Helm chart for Kubernetes
 type: application
 
 version: 0.3.0
-appVersion: 0.0.1
+appVersion: 0.0.4
+
+dependencies:
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - client-manager-database

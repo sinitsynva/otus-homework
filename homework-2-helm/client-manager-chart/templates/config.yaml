@@ -11,4 +11,4 @@ metadata:
   name: client-manager-secrets-1
 type: Opaque
 data:
-  DATABASE_URI: {{ printf "postgresql+psycopg2://%s:%s@%s/%s" .Values.externalPostgresql.postgresqlUsername .Values.externalPostgresql.postgresqlPassword .Values.externalPostgresql.postgresqlHost .Values.externalPostgresql.postgresqlDatabase  | b64enc | quote }}
+  DATABASE_URI: {{ printf "postgresql+psycopg2://%s:%s@%s-%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword .Release.Name .Values.postgresql.name .Values.postgresql.postgresqlDatabase  | b64enc | quote }}

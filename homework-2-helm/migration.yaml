@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "postgres-create-table1"
+  name: "postgres-create-table2"
 spec:
   template:
     metadata:
@@ -18,7 +18,7 @@ spec:
           - sh
           - "-c"
           - |
-            psql postgres://otshwrkuser:secret@postgres/OTSHWRKDB <<'EOF'
+            psql postgres://otshwrkuser:secret@client-service-0-postgresql/OTSHWRKDB <<'EOF'
               create table client_info (id serial primary key, username varchar, firstName varchar, lastName varchar, email varchar, phone varchar);
             EOF
 
